@@ -35,12 +35,22 @@ class DashboardScreen extends ConsumerWidget {
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(6),
+              width: 36,
+              height: 36,
               decoration: BoxDecoration(
-                color: AppTheme.primaryBlue.withOpacity(0.2),
+                color: AppTheme.primaryBlue.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
+                border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.3)),
               ),
-              child: const Icon(Icons.phone_in_talk_rounded, color: AppTheme.primaryBlue, size: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 36,
+                  height: 36,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
             const SizedBox(width: 10),
             Column(

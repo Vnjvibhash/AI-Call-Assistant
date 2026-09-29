@@ -10,7 +10,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import in.innovateria.aicallassistant.MainActivity
+import `in`.innovateria.aicallassistant.MainActivity
 
 class CallMonitorService : Service() {
 

@@ -85,6 +85,7 @@ class _CallForwardingSetupScreenState extends ConsumerState<CallForwardingSetupS
                   ),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
+                    isExpanded: true,
                     value: _selectedCarrier,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),

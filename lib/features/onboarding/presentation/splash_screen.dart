@@ -74,27 +74,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               ScaleTransition(
                 scale: _scaleAnimation,
                 child: Container(
-                  width: 100,
-                  height: 100,
+                  width: 120,
+                  height: 120,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [AppTheme.primaryBlue, AppTheme.accentCyan],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.primaryBlue.withOpacity(0.4),
-                        blurRadius: 30,
-                        spreadRadius: 5,
+                        color: AppTheme.primaryBlue.withValues(alpha: 0.35),
+                        blurRadius: 36,
+                        spreadRadius: 8,
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.phone_in_talk_rounded,
-                    size: 52,
-                    color: Colors.white,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(60),
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
