@@ -133,25 +133,25 @@ class _FluidGlassNavBarState extends State<FluidGlassNavBar> with SingleTickerPr
                     alignment: Alignment.centerLeft,
                     children: [
                       // Subtly illuminated top glass sheen edge
-                      // Positioned(
-                      //   top: 0,
-                      //   left: 20,
-                      //   right: 20,
-                      //   height: 1,
-                      //   child: Container(
-                      //     decoration: BoxDecoration(
-                      //       gradient: LinearGradient(
-                      //         colors: [
-                      //           Colors.transparent,
-                      //           Colors.white.withValues(alpha: 0.35),
-                      //           AppTheme.accentCyan.withValues(alpha: 0.4),
-                      //           Colors.white.withValues(alpha: 0.35),
-                      //           Colors.transparent,
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      Positioned(
+                        top: 0,
+                        left: 20,
+                        right: 20,
+                        height: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.transparent,
+                                Colors.white.withValues(alpha: 0.35),
+                                AppTheme.accentCyan.withValues(alpha: 0.4),
+                                Colors.white.withValues(alpha: 0.35),
+                                Colors.transparent,
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
 
                       // Fluid Moving Indicator Pill
                       AnimatedPositioned(
@@ -215,30 +215,6 @@ class _FluidGlassNavBarState extends State<FluidGlassNavBar> with SingleTickerPr
             color: AppTheme.accentCyan.withValues(alpha: 0.35),
             blurRadius: 10,
             offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          // Inner Specular curved reflection highlight
-          Positioned(
-            top: 2,
-            left: 8,
-            right: 8,
-            height: 14,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.white.withValues(alpha: 0.4),
-                    Colors.white.withValues(alpha: 0.0),
-                  ],
-                ),
-              ),
-            ),
           ),
         ],
       ),
