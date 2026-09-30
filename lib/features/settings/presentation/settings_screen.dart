@@ -355,37 +355,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 90),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 4,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/dashboard');
-              break;
-            case 1:
-              context.go('/history');
-              break;
-            case 2:
-              context.go('/ai-chat');
-              break;
-            case 3:
-              context.go('/reminders');
-              break;
-            case 4:
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.call_rounded), label: 'Calls'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_rounded), label: 'AI Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.alarm_rounded), label: 'Reminders'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: 'Settings'),
-        ],
       ),
     );
   }

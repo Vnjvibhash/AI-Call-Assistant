@@ -98,7 +98,7 @@ class _CallHistoryScreenState extends ConsumerState<CallHistoryScreen> {
                       ),
                     )
                   : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 90),
                       itemCount: filtered.length,
                       itemBuilder: (context, index) {
                         final call = filtered[index];
@@ -108,34 +108,6 @@ class _CallHistoryScreenState extends ConsumerState<CallHistoryScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/dashboard');
-              break;
-            case 1:
-              break;
-            case 2:
-              context.go('/ai-chat');
-              break;
-            case 3:
-              context.go('/reminders');
-              break;
-            case 4:
-              context.go('/settings');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.call_rounded), label: 'Calls'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_rounded), label: 'AI Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.alarm_rounded), label: 'Reminders'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: 'Settings'),
-        ],
       ),
     );
   }

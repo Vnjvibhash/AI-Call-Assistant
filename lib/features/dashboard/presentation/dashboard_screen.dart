@@ -117,37 +117,9 @@ class DashboardScreen extends ConsumerWidget {
             else
               ...calls.take(4).map((call) => _buildRecentCallItem(context, call)),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 90),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              break;
-            case 1:
-              context.go('/history');
-              break;
-            case 2:
-              context.go('/ai-chat');
-              break;
-            case 3:
-              context.go('/reminders');
-              break;
-            case 4:
-              context.go('/settings');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.call_rounded), label: 'Calls'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_rounded), label: 'AI Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.alarm_rounded), label: 'Reminders'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: 'Settings'),
-        ],
       ),
     );
   }

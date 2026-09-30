@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../app/providers.dart';
@@ -61,7 +60,7 @@ class RemindersScreen extends ConsumerWidget {
                 ),
               )
             : ListView.builder(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 90),
                 itemCount: reminders.length,
                 itemBuilder: (context, index) {
                   final reminder = reminders[index];
@@ -153,34 +152,6 @@ class RemindersScreen extends ConsumerWidget {
                   );
                 },
               ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/dashboard');
-              break;
-            case 1:
-              context.go('/history');
-              break;
-            case 2:
-              context.go('/ai-chat');
-              break;
-            case 3:
-              break;
-            case 4:
-              context.go('/settings');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.call_rounded), label: 'Calls'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_rounded), label: 'AI Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.alarm_rounded), label: 'Reminders'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: 'Settings'),
-        ],
       ),
     );
   }

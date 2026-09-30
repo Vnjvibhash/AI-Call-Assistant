@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/providers.dart';
@@ -238,7 +237,12 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
             // Input Bar
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.only(
+                left: 12,
+                right: 12,
+                top: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom > 0 ? 10 : 88,
+              ),
               decoration: const BoxDecoration(
                 color: AppTheme.surface,
                 border: Border(top: BorderSide(color: AppTheme.border)),
@@ -248,9 +252,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                   Expanded(
                     child: TextField(
                       controller: _inputController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Ask about callers, callbacks, summaries...',
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       ),
                       onSubmitted: _sendMessage,
                     ),
@@ -265,34 +269,6 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/dashboard');
-              break;
-            case 1:
-              context.go('/history');
-              break;
-            case 2:
-              break;
-            case 3:
-              context.go('/reminders');
-              break;
-            case 4:
-              context.go('/settings');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.call_rounded), label: 'Calls'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_rounded), label: 'AI Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.alarm_rounded), label: 'Reminders'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: 'Settings'),
-        ],
       ),
     );
   }
