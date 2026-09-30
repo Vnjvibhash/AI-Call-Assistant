@@ -133,29 +133,29 @@ class _FluidGlassNavBarState extends State<FluidGlassNavBar> with SingleTickerPr
                     alignment: Alignment.centerLeft,
                     children: [
                       // Subtly illuminated top glass sheen edge
-                      Positioned(
-                        top: 0,
-                        left: 20,
-                        right: 20,
-                        height: 1,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.transparent,
-                                Colors.white.withValues(alpha: 0.35),
-                                AppTheme.accentCyan.withValues(alpha: 0.4),
-                                Colors.white.withValues(alpha: 0.35),
-                                Colors.transparent,
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Positioned(
+                      //   top: 0,
+                      //   left: 20,
+                      //   right: 20,
+                      //   height: 1,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       gradient: LinearGradient(
+                      //         colors: [
+                      //           Colors.transparent,
+                      //           Colors.white.withValues(alpha: 0.35),
+                      //           AppTheme.accentCyan.withValues(alpha: 0.4),
+                      //           Colors.white.withValues(alpha: 0.35),
+                      //           Colors.transparent,
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
 
                       // Fluid Moving Indicator Pill
                       AnimatedPositioned(
-                        duration: const Duration(milliseconds: 340),
+                        duration: const Duration(milliseconds: 320),
                         curve: Curves.fastEaseInToSlowEaseOut,
                         left: activeLeft,
                         width: itemWidth,
@@ -199,16 +199,20 @@ class _FluidGlassNavBarState extends State<FluidGlassNavBar> with SingleTickerPr
             AppTheme.accentCyan,
           ],
         ),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.25),
+          width: 1,
+        ),
         boxShadow: [
           // Dynamic illuminated neon aura
           BoxShadow(
-            color: AppTheme.primaryBlue.withValues(alpha: 0.6),
+            color: AppTheme.primaryBlue.withValues(alpha: 0.55),
             blurRadius: 16,
             spreadRadius: 1,
             offset: const Offset(0, 3),
           ),
           BoxShadow(
-            color: AppTheme.accentCyan.withValues(alpha: 0.4),
+            color: AppTheme.accentCyan.withValues(alpha: 0.35),
             blurRadius: 10,
             offset: const Offset(0, 1),
           ),
@@ -216,12 +220,12 @@ class _FluidGlassNavBarState extends State<FluidGlassNavBar> with SingleTickerPr
       ),
       child: Stack(
         children: [
-          // Inner Specular curved reflection
+          // Inner Specular curved reflection highlight
           Positioned(
             top: 2,
             left: 8,
             right: 8,
-            height: 13,
+            height: 14,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -229,30 +233,10 @@ class _FluidGlassNavBarState extends State<FluidGlassNavBar> with SingleTickerPr
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withValues(alpha: 0.45),
+                    Colors.white.withValues(alpha: 0.4),
                     Colors.white.withValues(alpha: 0.0),
                   ],
                 ),
-              ),
-            ),
-          ),
-
-          // Fluid top neon pip indicator
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              margin: const EdgeInsets.only(top: 3.5),
-              width: 14,
-              height: 2.5,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.95),
-                borderRadius: BorderRadius.circular(2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    blurRadius: 4,
-                  ),
-                ],
               ),
             ),
           ),
