@@ -25,7 +25,9 @@ class CallSessionModel {
   final bool isMuted;
   final bool isSpeakerOn;
   final bool isAiThinking;
+  final bool isAiSpeaking;
   final bool isListeningToCaller;
+  final bool isRecordingAudio;
   final String currentSpokenWords;
   final List<TranscriptSegmentItem> segments;
   final bool isScreened;
@@ -42,7 +44,9 @@ class CallSessionModel {
     this.isMuted = false,
     this.isSpeakerOn = false,
     this.isAiThinking = false,
+    this.isAiSpeaking = false,
     this.isListeningToCaller = false,
+    this.isRecordingAudio = true,
     this.currentSpokenWords = '',
     this.segments = const [],
     this.isScreened = false,
@@ -60,7 +64,9 @@ class CallSessionModel {
     bool? isMuted,
     bool? isSpeakerOn,
     bool? isAiThinking,
+    bool? isAiSpeaking,
     bool? isListeningToCaller,
+    bool? isRecordingAudio,
     String? currentSpokenWords,
     List<TranscriptSegmentItem>? segments,
     bool? isScreened,
@@ -77,7 +83,9 @@ class CallSessionModel {
       isMuted: isMuted ?? this.isMuted,
       isSpeakerOn: isSpeakerOn ?? this.isSpeakerOn,
       isAiThinking: isAiThinking ?? this.isAiThinking,
+      isAiSpeaking: isAiSpeaking ?? this.isAiSpeaking,
       isListeningToCaller: isListeningToCaller ?? this.isListeningToCaller,
+      isRecordingAudio: isRecordingAudio ?? this.isRecordingAudio,
       currentSpokenWords: currentSpokenWords ?? this.currentSpokenWords,
       segments: segments ?? this.segments,
       isScreened: isScreened ?? this.isScreened,

@@ -21,6 +21,7 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
 
   StreamSubscription? _telecomSub;
   Timer? _durationTimer;
+  Timer? _streamingTimer;
   final _uuid = const Uuid();
 
   CallSessionController(this._ref, this._telecom, this._ai, this._tts, this._speech, this._db)
@@ -105,6 +106,7 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
     state = state!.copyWith(
       callState: TelecomConstants.stateActive,
       isAiHandling: true,
+      isRecordingAudio: true,
     );
 
     // Start in-call duration counter
@@ -129,19 +131,30 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
 
     _addSegment(speaker: 'ai', text: greeting, language: lang);
 
-    state = state!.copyWith(isAiThinking: false);
+    state = state!.copyWith(isAiThinking: false, isAiSpeaking: true);
 
     // Speak aloud using TTS
     await _tts.speak(greeting, lang);
 
+    if (state != null) {
+      state = state!.copyWith(isAiSpeaking: false);
+    }
+
     // After greeting completes, listen for caller's reply
-    _startListeningToCaller();
+    startListeningToCaller();
   }
 
-  void _startListeningToCaller() {
+  /// Start recording/listening to caller's microphone speech
+  void startListeningToCaller() {
     if (state == null || state!.callState != TelecomConstants.stateActive) return;
 
-    state = state!.copyWith(isListeningToCaller: true, currentSpokenWords: '');
+    _streamingTimer?.cancel();
+    state = state!.copyWith(
+      isListeningToCaller: true,
+      currentSpokenWords: '',
+      isAiThinking: false,
+      isAiSpeaking: false,
+    );
 
     final settings = _ref.read(assistantSettingsProvider);
 
@@ -160,6 +173,27 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
     );
   }
 
+  /// Manually commit collected words if speech recognition ends
+  void stopListeningAndCommit() {
+    if (state == null) return;
+    _speech.stopListening();
+    final words = state!.currentSpokenWords.trim();
+    state = state!.copyWith(isListeningToCaller: false, currentSpokenWords: '');
+    if (words.isNotEmpty) {
+      _processCallerSpeech(words);
+    }
+  }
+
+  /// Toggle caller microphone input
+  Future<void> toggleCallerMic() async {
+    if (state == null) return;
+    if (state!.isListeningToCaller) {
+      stopListeningAndCommit();
+    } else {
+      startListeningToCaller();
+    }
+  }
+
   /// Process caller's speech through AI service
   Future<void> _processCallerSpeech(String speech) async {
     if (state == null) return;
@@ -169,7 +203,11 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
     // Add caller's segment to transcript
     _addSegment(speaker: 'caller', text: speech, language: settings.language);
 
-    state = state!.copyWith(isAiThinking: true);
+    state = state!.copyWith(
+      isAiThinking: true,
+      isListeningToCaller: false,
+      currentSpokenWords: '',
+    );
 
     final history = state!.segments.map((s) => {'speaker': s.speaker, 'text': s.text}).toList();
 
@@ -189,10 +227,14 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
       language: response.detectedLanguage,
     );
 
-    state = state!.copyWith(isAiThinking: false);
+    state = state!.copyWith(isAiThinking: false, isAiSpeaking: true);
 
     // Speak response
     await _tts.speak(response.text, response.detectedLanguage);
+
+    if (state != null) {
+      state = state!.copyWith(isAiSpeaking: false);
+    }
 
     if (response.shouldHangup) {
       Timer(const Duration(seconds: 3), () {
@@ -201,17 +243,56 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
     } else {
       // Continue listening for next caller turn
       Timer(const Duration(milliseconds: 600), () {
-        _startListeningToCaller();
+        startListeningToCaller();
       });
     }
   }
 
-  /// Inject caller speech manually (for testing/simulator and voice fallback)
-  void simulateCallerSpeech(String speech) {
+  /// Inject caller speech with real-time word-by-word streaming into chat
+  void simulateCallerSpeech(String speech, {bool streamWords = true}) {
     if (state == null || state!.callState != TelecomConstants.stateActive) return;
     _speech.stopListening();
-    state = state!.copyWith(isListeningToCaller: false);
-    _processCallerSpeech(speech);
+    _streamingTimer?.cancel();
+
+    final text = speech.trim();
+    if (text.isEmpty) return;
+
+    if (!streamWords) {
+      state = state!.copyWith(isListeningToCaller: false, currentSpokenWords: '');
+      _processCallerSpeech(text);
+      return;
+    }
+
+    // Stream words into currentSpokenWords with human speaking pace
+    final words = text.split(RegExp(r'\s+'));
+    state = state!.copyWith(
+      isListeningToCaller: true,
+      currentSpokenWords: '',
+      isAiThinking: false,
+      isAiSpeaking: false,
+    );
+
+    int wordIndex = 0;
+    _streamingTimer = Timer.periodic(const Duration(milliseconds: 85), (timer) {
+      if (state == null || state!.callState != TelecomConstants.stateActive) {
+        timer.cancel();
+        return;
+      }
+
+      wordIndex++;
+      final currentSubstr = words.take(wordIndex).join(' ');
+      state = state!.copyWith(currentSpokenWords: currentSubstr);
+
+      if (wordIndex >= words.length) {
+        timer.cancel();
+        Timer(const Duration(milliseconds: 350), () {
+          if (state != null && state!.callState == TelecomConstants.stateActive) {
+            state = state!.copyWith(isListeningToCaller: false, currentSpokenWords: '');
+            _processCallerSpeech(text);
+          }
+        });
+      }
+    });
   }
 
   void _addSegment({required String speaker, required String text, required String language}) {
@@ -245,6 +326,7 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
     if (state == null) return;
 
     _durationTimer?.cancel();
+    _streamingTimer?.cancel();
     _speech.stopListening();
     _tts.stop();
 
@@ -335,6 +417,7 @@ class CallSessionController extends StateNotifier<CallSessionModel?> {
   @override
   void dispose() {
     _durationTimer?.cancel();
+    _streamingTimer?.cancel();
     _telecomSub?.cancel();
     super.dispose();
   }
